@@ -1,0 +1,64 @@
+﻿namespace PaymentDetail.Server.Controllers
+{
+    using Data;
+    using Data.Models;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+
+    public class PaymentDetailController : ApiController
+    {
+        private readonly PaymentDetailDbContext  _context;
+
+        public PaymentDetailController(PaymentDetailDbContext context)
+        {
+            _context = context;
+        }
+
+        // GET: api/PaymentDetail
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PaymentDetail>>> GetPaymentDetails()
+        {
+            return await _context.PaymentDetails.ToListAsync();
+        }
+
+        // GET: api/PaymentDetail/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PaymentDetail>> GetPaymentDetail(Guid id)
+        {
+            var paymentDetail = await _context.PaymentDetails.FindAsync(id);
+
+            if (paymentDetail == null)
+            {
+                return new NotFoundResult();
+            }
+
+            return paymentDetail;
+        }
+        
+        // POST: api/PaymentDetail
+        [HttpPost]
+        public async Task<ActionResult<PaymentDetail>> PostPaymentDetail(PaymentDetail paymentDetail)
+        {
+            _context.PaymentDetails.Add(paymentDetail);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetPaymentDetail", new { id = paymentDetail.Id }, paymentDetail);
+        }
+
+        // DELETE: api/PaymentDetail/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePaymentDetail(Guid id)
+        {
+            var paymentDetail = await _context.PaymentDetails.FindAsync(id);
+            if (paymentDetail == null)
+            {
+                return new NotFoundResult(); 
+            }
+
+            _context.PaymentDetails.Remove(paymentDetail);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+    }
+}
