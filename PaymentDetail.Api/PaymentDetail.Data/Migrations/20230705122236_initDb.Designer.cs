@@ -12,8 +12,8 @@ using PaymentDetail.Data;
 namespace PaymentDetail.Data.Migrations
 {
     [DbContext(typeof(PaymentDetailDbContext))]
-    [Migration("20230702144410_InitDb")]
-    partial class InitDb
+    [Migration("20230705122236_initDb")]
+    partial class initDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -2,6 +2,6 @@ export class PaymentDetail {
   paymentDetailId: string = '';
   cardOwnerName: string = '';
   cardNumber: string = '';
-  expirationDate: Date = new Date('');
+  expirationDate: string = '';
   securityCode: string = '';
 }

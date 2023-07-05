@@ -5,20 +5,17 @@ import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-payment-details-form',
   templateUrl: './payment-details-form.component.html',
-  styleUrls: [
-    
-  ],
+  styleUrls: [],
 })
 export class PaymentDetailsFormComponent {
   constructor(public service: PaymentDetailService) {}
 
   onSubmit(form: NgForm) {
-    this.service.postPaymentDetail()
-    .subscribe(res => {
+    this.service.postPaymentDetail().subscribe((res) => {
       console.log(res),
-        (      err: any) => {
-        console.log(err) 
-      }
-    })
+        (err: any) => {
+          console.log(err);
+        };
+    });
   }
 }
