@@ -1,62 +1,67 @@
 ﻿namespace PaymentDetail.Server.Controllers;
 
-using Data;
-using Data.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Services.Contracts;
+using ViewModels;
 
 public class PaymentDetailController : ApiController
 {
-    private readonly PaymentDetailDbContext _context;
+    private readonly IPaymentDetail paymentDetailService;
 
-    public PaymentDetailController(PaymentDetailDbContext context)
+    public PaymentDetailController(IPaymentDetail paymentDetailService)
     {
-        _context = context;
+        this.paymentDetailService = paymentDetailService;
     }
 
-    // GET: api/PaymentDetail
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<PaymentDetail>>> GetPaymentDetails()
+    public async Task<IEnumerable<AllPaymentDetails>> GetAll()
     {
-        return await _context.PaymentDetails.ToListAsync();
+       var allPaymentDetails =  await paymentDetailService.GetAllAsync();
+
+       return allPaymentDetails;
     }
 
-    // GET: api/PaymentDetail/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<PaymentDetail>> GetPaymentDetail(Guid id)
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<GetById?>> GetById(Guid id)
     {
-        var paymentDetail = await _context.PaymentDetails.FindAsync(id);
+        var paymentDetail = await paymentDetailService.GetByIdAsync(id);
 
         if (paymentDetail == null)
         {
-            return new NotFoundResult();
+            return NotFound();
         }
 
         return paymentDetail;
     }
 
-    // POST: api/PaymentDetail
     [HttpPost]
-    public async Task<ActionResult<PaymentDetail>> PostPaymentDetail(PaymentDetail paymentDetail)
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> Create(CreatePaymentDetail model)
     {
-        _context.PaymentDetails.Add(paymentDetail);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction("GetPaymentDetail", new { id = paymentDetail.Id }, paymentDetail);
-    }
-
-    // DELETE: api/PaymentDetail/5
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeletePaymentDetail(Guid id)
-    {
-        var paymentDetail = await _context.PaymentDetails.FindAsync(id);
-        if (paymentDetail == null)
+        if (!ModelState.IsValid)
         {
-            return new NotFoundResult();
+            return BadRequest(ModelState);
         }
 
-        _context.PaymentDetails.Remove(paymentDetail);
-        await _context.SaveChangesAsync();
+        await paymentDetailService.AddAsync(model);
+
+        return CreatedAtAction(nameof(GetById), new { id = model.Id }, model);
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> Delete(Guid id)
+    {
+        var paymentDetail = await paymentDetailService.GetByIdAsync(id);
+
+        if (paymentDetail == null)
+        {
+            return NotFound();
+        }
+
+        await paymentDetailService.DeleteAsync(id);
 
         return NoContent();
     }

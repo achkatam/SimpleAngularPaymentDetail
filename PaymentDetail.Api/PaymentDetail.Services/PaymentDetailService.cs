@@ -1,13 +1,12 @@
 ﻿namespace PaymentDetail.Services;
 
-using Microsoft.EntityFrameworkCore;
-
 using Contracts;
 using Data;
 using Data.Models;
-using ViewModels.PaymentDetails;
+using Microsoft.EntityFrameworkCore;
+using ViewModels;
 
-public class PaymentDetailService : IPaymentDetailService
+public class PaymentDetailService : IPaymentDetail
 {
     private readonly PaymentDetailDbContext dbContext;
 
@@ -16,69 +15,48 @@ public class PaymentDetailService : IPaymentDetailService
         this.dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<AllCardsViewModel>> GetAllAsync()
-    {
-        var allPayments = await this.dbContext
-            .PaymentDetails
-            .Select(p => new AllCardsViewModel()
-            {
-                Id = p.Id,
-                CardOwnerName = p.CardOwnerName,
-                CardNumber = p.CardNumber,
-                ExpirationDate = p.ExpirationDate,
-                SecurityCode = p.SecurityCode
-            })
-            .ToListAsync();
-
-        return allPayments;
-    }
-
-    public async Task<CardById> GetPaymentByIdAsync(Guid id)
-    {
-        var paymentById = await this.dbContext
-            .PaymentDetails
-            .Where(p => p.Id == id)
-            .Select(p => new CardById()
-            { 
-                CardOwnerName = p.CardOwnerName,
-                CardNumber = p.CardNumber,
-                ExpirationDate = p.ExpirationDate,
-                SecurityCode = p.SecurityCode
-            })
-            .FirstOrDefaultAsync();
-
-        return paymentById;
-    }
-
-    public async Task<CreateRequestModel> GetCreateAsync()
-    {
-        var modelToCreate = new CreateRequestModel();
-
-        return modelToCreate;
-    }
-
-    public async Task CreateAsync(CreateRequestModel modelToCreate)
-    {
-        var paymentToCreate = new PaymentDetail()
+    public async Task<IEnumerable<AllPaymentDetails>> GetAllAsync()
+    => await dbContext.PaymentDetails
+        .Select(x => new AllPaymentDetails
         {
-            CardOwnerName = modelToCreate.CardOwnerName,
-            CardNumber = modelToCreate.CardNumber,
-            ExpirationDate = modelToCreate.ExpirationDate,
-            SecurityCode = modelToCreate.SecurityCode
+            Id = x.Id,
+            CardOwnerName = x.CardOwnerName,
+            CardNumber = x.CardNumber,
+            ExpirationDate = x.ExpirationDate,
+            CVV = x.CVV
+        })
+        .ToListAsync();
+
+    public async Task<GetById?> GetByIdAsync(Guid id)
+    => await dbContext.PaymentDetails
+        .Where(x => x.Id == id)
+        .Select(x => new GetById
+        {
+            Id = x.Id,
+            CardOwnerName = x.CardOwnerName,
+            CardNumber = x.CardNumber,
+            ExpirationDate = x.ExpirationDate,
+            CVV = x.CVV
+        })
+        .FirstOrDefaultAsync();
+
+    public async Task AddAsync(CreatePaymentDetail model)
+    {
+        var toAdd = new PaymentDetail
+        {
+            CardOwnerName = model.CardOwnerName,
+            CardNumber = model.CardNumber,
+            ExpirationDate = model.ExpirationDate,
+            CVV = model.CVV
         };
 
-        await this.dbContext.PaymentDetails.AddAsync(paymentToCreate);
-        await this.dbContext.SaveChangesAsync();
+        await dbContext.PaymentDetails.AddAsync(toAdd);
+        await dbContext.SaveChangesAsync();
     }
-
 
     public async Task DeleteAsync(Guid id)
     {
-        var paymentToDelete = this.dbContext
-            .PaymentDetails
-            .FirstOrDefault(p => p.Id == id);
-
-        this.dbContext.PaymentDetails.Remove(paymentToDelete);
-        await this.dbContext.SaveChangesAsync();
+        dbContext.PaymentDetails.Remove(await dbContext.PaymentDetails.FindAsync(id));
+        await dbContext.SaveChangesAsync();
     }
 }

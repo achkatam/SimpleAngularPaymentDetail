@@ -5,8 +5,8 @@ using Models;
 
 public class PaymentDetailDbContext : DbContext
 {
-    public PaymentDetailDbContext(DbContextOptions<PaymentDetailDbContext> options)
-    : base(options)
+    public PaymentDetailDbContext(DbContextOptions<PaymentDetailDbContext> options):
+        base(options)
     {
         
     }

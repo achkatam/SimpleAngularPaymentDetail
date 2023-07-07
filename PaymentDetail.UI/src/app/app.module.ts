@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PaymentDetailsComponent } from './payment-details/payment-details.component';
-import { PaymentDetailsFormComponent } from './payment-details-form/payment-details-form.component';
-import {FormsModule} from '@angular/forms';
+import { PaymentDetailsFormComponent } from './payment-details/payment-details-form/payment-details-form.component';
+import { PaymentDetailService } from './shared/payment-detail.service';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
@@ -16,11 +16,10 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     FormsModule,
-    HttpClientModule 
+    HttpClientModule
   ],
-  providers: [],
+  providers: [PaymentDetailService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

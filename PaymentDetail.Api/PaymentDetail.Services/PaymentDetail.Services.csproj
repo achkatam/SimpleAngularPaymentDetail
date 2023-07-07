@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.19" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\PaymentDetail.Common\PaymentDetail.Common.csproj" />
     <ProjectReference Include="..\PaymentDetail.Data\PaymentDetail.Data.csproj" />
     <ProjectReference Include="..\PaymentDetail.ViewModels\PaymentDetail.ViewModels.csproj" />
