@@ -6,7 +6,28 @@
         <app-payment-details-form />
     </div>
     <div class="col-md-6">
-        <span>Details</span>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>Owner's name</th>
+                    <th>Card Number</th>
+                    <th>Exp.Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let payment of service.listOfPayments">
+                    <td (click)="populateForm(payment)">{{payment.cardOwnerName}}</td>
+                    <td (click)="populateForm(payment)">{{payment.cardNumber}}</td>
+                    <td (click)="populateForm(payment)">{{payment.expirationDate}}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger" (click)="onDelete(payment.Id )">
+                            <i class="fas fa-trash-alt"></i> Delete
+                          </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
     

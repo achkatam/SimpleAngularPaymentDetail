@@ -1,7 +1,7 @@
 export class PaymentDetail {
-    Id :string | undefined;
-    cardOwnerName :string | undefined;
-    cardNumber :string | undefined;
-    expirationDate :string | undefined;
-    cvv :string | undefined;
+  Id!: string;
+  cardOwnerName!: string;
+  cardNumber!: string;
+  expirationDate!: string;
+  cvv!: string;
 }

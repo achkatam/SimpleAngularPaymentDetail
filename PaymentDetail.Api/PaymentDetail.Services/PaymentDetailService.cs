@@ -28,17 +28,15 @@ public class PaymentDetailService : IPaymentDetail
         .ToListAsync();
 
     public async Task<GetById?> GetByIdAsync(Guid id)
-    => await dbContext.PaymentDetails
-        .Where(x => x.Id == id)
-        .Select(x => new GetById
-        {
-            Id = x.Id,
-            CardOwnerName = x.CardOwnerName,
-            CardNumber = x.CardNumber,
-            ExpirationDate = x.ExpirationDate,
-            CVV = x.CVV
-        })
-        .FirstOrDefaultAsync();
+    {
+        return await dbContext.PaymentDetails
+            .Where(x => x.Id == id)
+            .Select(x => new GetById
+            {
+              
+            })
+            .FirstOrDefaultAsync();
+    }
 
     public async Task AddAsync(CreatePaymentDetail model)
     {

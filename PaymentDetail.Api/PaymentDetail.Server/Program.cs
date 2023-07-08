@@ -31,8 +31,10 @@ app.UseCors(options =>
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app
+        .UseDeveloperExceptionPage()
+        .UseSwagger()
+        .UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
