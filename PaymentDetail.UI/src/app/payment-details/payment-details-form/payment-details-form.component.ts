@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
-import { PaymentDetailService } from 'src/app/shared/payment-detail.service';
-import { PaymentDetail } from 'src/app/shared/payment-details.model';
+import { ToastrService } from 'ngx-toastr'; 
+import { PaymentDetailService } from '../../shared/payment-detail.service';
+import { PaymentDetail } from '../../shared/payment-details.model';
 
 @Component({
   selector: 'app-payment-details-form',
